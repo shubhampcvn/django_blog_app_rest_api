@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+<h2>Account</h2>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="email" name="email" class="form-control" placeholder="Enter email"
+               required value={{ account_form.initial.email }}>
+    </div>
+    <div class="form-group">
+        <input type="text" name="username" class="form-control" placeholder="username"
+               required value={{ account_form.initial.username  }}>
+    </div>
+
+    {% for field in account_form %}
+        {% for error in field.errors %}
+             <small style="color:red"> {{error}} </small>
+        {% endfor %}
+    {% endfor %}
+
+    {% if account_form.non_field_errors %}
+        <div>
+            <small style="color:red"> {{account_form.non_field_errors}} </small>
+        </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+
+    <a href="{% url 'password_change' %}"> Change Password </a>
+</form>
+</div>
+
+<div class="d-flex">
+    {% if blog_posts %}
+    <ol>
+        {% for post in blog_posts %}
+        <li><a href="{% url 'blog:detail' post.slug %}">{{ post }}</a></li>
+        {% endfor %}
+    </ol>
+    {% else %}
+    <p>You don't have any post.</p>
+    <a href="{% url 'blog:create' %}"> Create new post</a>
+    {% endif %}
+</div>
+
+{% endblock %}
